@@ -78,7 +78,6 @@ h1 {
 #instructions {
     color: yellow; 
     background-color: rgba(0, 0, 0, 0.8); 
-    padding: 10px;
     position: fixed;
     bottom: 3em;
     left: 50%;
@@ -90,6 +89,7 @@ footer {
     color: white;
     background-color: black; 
     padding: 20px;
+    padding-right: 10px;
     text-align: center;
     position: fixed;
     bottom: 0;
@@ -97,6 +97,7 @@ footer {
     width: 100%;
     z-index: 1000; 
     opacity: 1; 
+
 }
 
 
@@ -112,7 +113,10 @@ footer {
         font-size: 12px; 
     }
     #instructions {
-        padding-bottom: 100px;
+        padding-bottom: 150px;
+        margin-bottom: 60px;
+        overflow: auto;
     }
+
     
 }

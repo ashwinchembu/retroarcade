@@ -151,6 +151,7 @@ A new function that checks if a player should be considered dead based on bounda
 The update function not only moves the players but also checks game state conditions like game activity and player survival, making it a central piece of game logic.
 */
   update() {
+    this.updateEnemyAI();
     if (!this.gameActive) return; 
 
     let marioDied = false;
@@ -194,21 +195,46 @@ The update function not only moves the players but also checks game state condit
         console.log("Mario Died - Game Over");
         this.gameActive = false;
         this.displayGameOver();
+        return;
     } 
     
+}
+updateEnemyAI() {
+  this.lightCycles.forEach(lightCycle => {
+      if (lightCycle.name === "Mario") { 
+          return;
+      }
+
+      let directions = [{ x: 0, y: -1 }, { x: 0, y: 1 }, { x: 1, y: 0 }, { x: -1, y: 0 }];
+      let randomDirection = directions[Math.floor(Math.random() * directions.length)];
+      if (!this.willCollide(lightCycle, randomDirection)) {
+          lightCycle.direction = randomDirection;
+      }
+  });
+}
+
+willCollide(lightCycle, direction) {
+  let newPosition = {
+      x: lightCycle.position.x + direction.x * this.cellSize,
+      y: lightCycle.position.y + direction.y * this.cellSize
+  };
+
+  return this.playerShouldDie({...lightCycle, position: newPosition});
 }
 
 
 displayGameOver() {
-    BACKGROUND_COLOR = "#000";
-    this.canvas.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-    this.draw();
-    this.canvas.font = "30px Monaco";
-    this.canvas.fillStyle = "red";
-    this.canvas.textAlign = "center";
-    this.canvas.fillText("You Lose!", this.canvasElement.width / 2, this.canvasElement.height / 2);
-    this.showRestartButton();
+  BACKGROUND_COLOR = "#000";
+  this.canvas.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+  this.canvas.fillStyle = BACKGROUND_COLOR;
+  this.canvas.fillRect(0, 0, this.width, this.height);
+  this.canvas.fillStyle = "red";
+  this.canvas.font = "30px Monaco";
+  this.canvas.textAlign = "center";
+  this.canvas.fillText("You Lose!", this.canvasElement.width / 2, this.canvasElement.height / 2);
+  this.showRestartButton();
 }
+
 
 
 
@@ -369,32 +395,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function resetGame() {
-    game = new Game("myCanvas", CELL_SIZE);  
-    players.forEach(player => {
-        player.position = {
-            x: Math.floor(
-                Math.random() * (game.canvasElement.width - CELL_SIZE)
-            ),
-            y: Math.floor(
-                Math.random() * (game.canvasElement.height - CELL_SIZE)
-            )
-        };
+  this.lightCycles = [];
+  this.recordedPositions = [];
+  this.gameActive = true;
 
-        directions = [
-            { x: 0, y: -1 },
-            { x: 0, y: 1 },
-            { x: 1, y: 0 },
-            { x: -1, y: 0 }
-        ];
+  this.canvas.clearRect(0, 0, this.width, this.height);
+  this.draw();  
+  players.forEach(player => {
+      player.position = {
+          x: Math.floor(Math.random() * (this.canvasElement.width - CELL_SIZE)),
+          y: Math.floor(Math.random() * (this.canvasElement.height - CELL_SIZE))
+      };
+      player.active = true;  
+      this.addLightCycle(player);
+  });
 
-        player.direction = directions[Math.floor(Math.random() * directions.length)];
-        player.active = true;  
-        game.addLightCycle(player);
-    });
-
-    game.gameActive = true;  
-    beginningDate = performance.now();  
-    main(); 
+  BACKGROUND_COLOR = "#000";
 }
 
 if (game) {
@@ -421,18 +437,26 @@ let beginningDate = performance.now();
 
 function main() {
     if (!game.gameActive) {
+      clearTimeout(gameTimer);
         return; 
     }
 
-    game.update();  
-    if (game.gameActive) {  
-        const elapsedTime = performance.now() - beginningDate;
-        const decreasedTimeout = Math.max(200 - CELL_SIZE * Math.floor(elapsedTime / 2000), 100);
-        setTimeout(main, decreasedTimeout); 
+    game.update();
+    if (game.finished()) {
+        const winner = game.getWinner();
+        if (winner) {
+            for (let i = 0; i < players.length; i++) {
+                if (players[i].name === winner.name) {
+                    players[i].score += 1;
+                }
+            }
+        }
+        game = load();  
+        beginningDate = performance.now();
     }
+
+    const elapsedTime = performance.now() - beginningDate;
+    const decreasedTimeout = Math.max(200 - CELL_SIZE * Math.floor(elapsedTime / 2000), 100);
+    clearTimeout(gameTimer);  
+    gameTimer = setTimeout(main, decreasedTimeout);  
 }
-
-
-
-  
-  

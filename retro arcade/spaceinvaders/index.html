@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <button id="homeButton">&#8592; Go to Homepage (esc)</button>
+        <div id="retroArcadeTitle">Retro Arcade</div>
+    </header>
+    <div class="container">
+        <canvas id="space"></canvas> 
+    </div>
+    <script>
+        document.getElementById('homeButton').addEventListener('click', function() {
+            window.location.href = '../index.html'; 
+        });
+    </script>
+</body>
+</html>

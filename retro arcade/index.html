@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Welcome to The Retro Arcade</h1>
+    <p id="instructions">Use the arrow keys to navigate between games and press space to select a game.</p>
+    <div id="matrixRain"></div>
+    <div class="game-tiles">
+        <div class="tile">
+            <a href="spaceinvaders/index.html">
+                <img src="images/space.png" alt="Space Invaders">
+                <p class="description">Defend Earth from wave after wave of descending aliens!</p>
+            </a>
+        </div>
+        <div class="tile">
+            <a href="breakout/index.html">
+                <img src="images/breakout.png" alt="Breakout">
+                <p class="description">Break blocks with skill and strategy in a race against time!</p>
+            </a>
+        </div>
+        <div class="tile">
+            <a href="tron/index.html">
+                <img src="images/tron.png" alt="Tron">
+                <p class="description">Outmaneuver and trap your opponents in this light cycle battle!</p>
+            </a>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <footer >
+        All images and games courtesy of Ashwin Chembu, except Tron, which is from <a href="https://github.com/tmattio/tron-js" style="color: lime;">tmattio</a>.
+    </footer>
+    
+</body>
+</html>

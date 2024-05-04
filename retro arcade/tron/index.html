@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Fullscreen Canvas Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <button id="homeButton">&#8592; Go to Homepage (esc)</button>
+    <div id="retroArcadeTitle">Retro Arcade</div>
+</header>
+  <main role="main" class="game-container">
+    <canvas id="myCanvas"></canvas>
+  </main>
+  <script src="./script.js" defer></script>
+  <script>
+    document.getElementById('homeButton').addEventListener('click', function() {
+        window.location.href = '../index.html'; 
+    });
+</script>
+</body>
+</html>
